@@ -24,7 +24,8 @@ module dffe_ref(d, clk, en, clr, q);
        if (clr) begin
            q <= 1'b0;
        //If enable is high, set q to the value of d
-       end else if (en) begin
+       end 
+		 else if (en) begin
            q <= d;
        end
    end
