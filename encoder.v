@@ -10,21 +10,20 @@ module encoder (ck, clk, data_ready, aclr, xk, zk, K, busy, dd0, dd1, dd2);
 	reg [31:0] K_size; 
 	
 	always @(posedge clk) begin
-		if (aclr) begin
-			counter = 0;
-			data_rdy = 1'b0;
-		end
-        
+        if (aclr) begin
+            counter = 0;
+            data_rdy = 1'b0;
+        end
         if (data_ready) begin 
             data_rdy = 1'b1;
-			if (K) begin
-				K_size = 32'd6144;
-			end
-			else begin
-				K_size = 32'd1056;
-			end
+            if (K) begin
+                K_size = 32'd6144;
+            end
+            else begin
+                K_size = 32'd1056;
+            end
             counter = 1;
-		end
+        end
         
         if(data_rdy == 1) begin
             counter = counter + 1;
