@@ -5,7 +5,7 @@ module wrapper(K, clk, ck1, ck2, aclr, data_ready, xk1, zk1, xk2, zk2, read_requ
 	output xk1, zk1, xk2, zk2, read_request; // read_request = interleaver's fifo: telling it we're ready
 	
     wire ck_encoder, busy1, busy2;
-    wire used_dw[8:0];
+    wire [8:0] used_dw;
     FIFO f1(.aclr(aclr), .clock(clk), .data(ck1), .rdreq(busy2), .wrreq(data_ready == 0), .q(ck_encoder), .usedw(used_dw)); // fifo interfacing direct input (ck1) and 1st encoder (e1)
 
 	encoder e1(ck_encoder, clk, data_ready, aclr, xk1, zk1, K, busy1);
