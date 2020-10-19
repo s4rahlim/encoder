@@ -6,7 +6,7 @@ def xor(a, b):
     else:
         return 0
 
-K = 6144
+K = 40
 seed = 50
 
 random.seed(seed)
