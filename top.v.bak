@@ -1,0 +1,49 @@
+module top(clk, reset, data_ready, k_bit_in, cin, TEMP_usedw, xk1, zk1, xk2, zk2);
+
+input clk, reset, data_ready, k_bit_in, cin;
+output xk1, zk1, xk2, zk2;
+output [8:0] TEMP_usedw; // debugging signal from the interleaver's FIFO
+
+wire cprime;             // resutling output from interleaver, input to encoder
+wire il_FIFO_rdreq;      // read_request signal for interleaver's FIFO
+wire k_intermediate;     // k_bit passed from interleaver to encoder
+wire il_valid;           // valid signal from the interleaver
+
+// --- temporary debug signals from the interleaver... will remove later
+wire [13:0] address_ROM;
+wire [12:0] address_RAM;
+wire [12:0] pi;
+
+// interleaver subsystem
+interleaver ileavertop1(
+	.clk(clk), 
+	.reset(reset), 
+	.data_ready(data_ready), 
+	.k_bit_in(k_bit_in), 
+	.FIFO_rdreq(il_FIFO_rdreq), 
+	.cin(cin), 
+	.cout(cprime), 
+	.data_valid(il_valid), 
+	.k_bit_out(k_intermediate), 
+	.TEMP_usedw(TEMP_used), 
+	.address_RAM(address_RAM), 
+	.address_ROM(address_ROM), 
+	.pi(pi)
+);
+
+// encoder subsystem
+wrapper encodertop(
+	.K(k_intermediate), 
+	.clk(clk), 
+	.ck1(cin), 
+	.ck2(cprime), 
+	.aclr(reset), 
+	.data_ready(il_valid), 
+	.xk1(xk1), 
+	.zk1(zk1), 
+	.xk2(xk2), 
+	.zk2(zk2), 
+	.read_request(il_FIFO_rdreq)
+);
+
+endmodule 
