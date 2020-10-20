@@ -10,7 +10,7 @@ K = 16
 seed = 500
 
 random.seed(seed)
-p = [random.randint(0, 1) for _ in range(K)]
+p = [random.randint(1, 1) for _ in range(K)]
 
 
 x = []
