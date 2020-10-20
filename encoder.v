@@ -22,7 +22,7 @@ module encoder (ck, clk, data_ready, aclr, xk, zk, K, busy, dd0, dd1, dd2, debug
         if (data_ready) begin 
             data_rdy = 1'b1;
             if (K) begin
-                K_size = 32'd6144;
+                K_size = 32'd16;
             end
             else begin
                 K_size = 32'd1056;
@@ -34,7 +34,7 @@ module encoder (ck, clk, data_ready, aclr, xk, zk, K, busy, dd0, dd1, dd2, debug
 					counter = counter + 1;
 			  end
 			  
-			  if(counter > K_size + 3) begin // after tail bits are generated
+			  if(counter > K_size +1 + 3) begin // after tail bits are generated
 					data_rdy = 1'b0;
 					counter = 0;
 			  end
@@ -53,8 +53,8 @@ module encoder (ck, clk, data_ready, aclr, xk, zk, K, busy, dd0, dd1, dd2, debug
 	xor x2(m1, s, q0);
 	xor x3(zk, m1, q2);
 	assign xk = ck;
-	assign last = (counter > K_size);
-	assign busy = (0 < counter && counter <= (K_size));  
+	assign last = (counter > K_size+1);
+	assign busy = (0 < counter && counter <= (K_size)+1);  
 	assign mux_out = last? m0 : ck;
 	assign dd0 = q0;
 	assign dd1 = q1;
