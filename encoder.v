@@ -1,17 +1,33 @@
-module encoder (ck, clk, data_ready, aclr, xk, zk, K, busy, dd0, dd1, dd2, debug, debug2);
+module encoder (ck, clk, data_ready, aclr, xk, zk, K, busy, dd0, dd1, dd2, debug, debug2, debug3);
 	input ck, clk, data_ready, aclr; 
 	//datra_ready from interleaver to indicate data is ready, only one cycle 
 	input K; //0 is smaller block 1056, 1 is larger block 6144
 	output xk, zk, busy, dd0, dd1, dd2, debug;
 	output [31:0] debug2;
+	output debug3;
 	
 	wire q0, q1, q2, w3, s, m0, m1, last, mux_out;
 	reg [31:0] counter; 
 	reg data_rdy;
 	reg [31:0] K_size; 
 	
+	reg [31:0] inp_total;
+	reg debug3_r;
+	
 	assign debug = last;
-	assign debug2 = counter;
+	assign debug2 = inp_total; //counter;
+	assign debug3 = debug3_r;
+	
+	always @(negedge clk) begin
+		if (data_rdy != 0 && (counter == (K_size +1)) && (inp_total != 32'd7)) begin
+			debug3_r = 1;
+		end
+		else begin
+			if(aclr) begin
+				debug3_r = 0;
+			end
+		end
+	end
 	
 	always @(posedge clk) begin
         if (aclr) begin
@@ -22,7 +38,7 @@ module encoder (ck, clk, data_ready, aclr, xk, zk, K, busy, dd0, dd1, dd2, debug
         if (data_ready) begin 
             data_rdy = 1'b1;
             if (K) begin
-                K_size = 32'd6144;
+                K_size = 32'd16;
             end
             else begin
                 K_size = 32'd1056;
@@ -32,11 +48,15 @@ module encoder (ck, clk, data_ready, aclr, xk, zk, K, busy, dd0, dd1, dd2, debug
 		  else begin
 				if(data_rdy == 1) begin
 					counter = counter + 1;
+					if(zk == 1) begin
+						inp_total = inp_total + 1;
+					end
 			  end
 			  
-			  if(counter > K_size + 3) begin // after tail bits are generated
+			  if(counter > K_size +1 + 3) begin // after tail bits are generated
 					data_rdy = 1'b0;
 					counter = 0;
+					inp_total = 0;
 			  end
 		  end        
 
@@ -53,8 +73,8 @@ module encoder (ck, clk, data_ready, aclr, xk, zk, K, busy, dd0, dd1, dd2, debug
 	xor x2(m1, s, q0);
 	xor x3(zk, m1, q2);
 	assign xk = ck;
-	assign last = (counter > K_size);
-	assign busy = (0 < counter && counter <= (K_size));  
+	assign last = (counter > K_size+1);
+	assign busy = (0 < counter && counter <= (K_size)+1);  
 	assign mux_out = last? m0 : ck;
 	assign dd0 = q0;
 	assign dd1 = q1;

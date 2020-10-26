@@ -8,8 +8,11 @@ module wrapper(K, clk, ck1, ck2, aclr, data_ready, xk1, zk1, xk2, zk2, read_requ
     wire [8:0] used_dw;
     FIFO f1(.aclr(aclr), .clock(clk), .data(ck1), .rdreq(busy2), .wrreq(data_ready == 0), .q(ck_encoder), .usedw(used_dw)); // fifo interfacing direct input (ck1) and 1st encoder (e1)
 
-	encoder e1(ck_encoder, clk, data_ready, aclr, xk1, zk1, K, busy1);
-	encoder e2(ck2, clk, data_ready, aclr, xk2, zk2, K, busy2);
+	 wire e1_d0, e1_d1, e1_d2, e1_debug, e1_debug3, e2_d0, e2_d1, e2_d2, e2_debug, e2_debug3;
+	 wire [31:0] e1_debug2, e2_debug2;
+	 
+	encoder e1(ck_encoder, clk, data_ready, aclr, xk1, zk1, K, busy1, e1_d0, e1_d1, e1_d2, e1_debug, e1_debug2, e1_debug3);
+	encoder e2(ck2, clk, data_ready, aclr, xk2, zk2, K, busy2, e2_d0, e2_d1, e2_d2, e2_debug, e2_debug2, e2_debug3);
     
     assign read_request = busy2; // busy2 and busy1 should be identical
 	

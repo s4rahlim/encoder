@@ -55,13 +55,16 @@ def encoder(p):
 
     return x, z, dl, dc, dr
 
-K = 6144
+K = 1056
 seed = 500
 
 random.seed(seed)
-p = [random.randint(1, 1) for _ in range(K)]
+p = [random.randint(0, 0) for _ in range(K)]
+for z in range(0, 16):
+    p[z] = 1
 #p = [1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0]
 pi = [-1 for _ in range(K)]
+
 
 x = []
 z = []
