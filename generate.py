@@ -91,11 +91,11 @@ for i in range(K):
     pi_index = (f1 * i + f2 * i * i) % K
     pi[i] = p[pi_index]
 
+
 # generate outputs for 1st level encoder
 x, z, dl, dc, dr = encoder(p)
 # generate outputs for interleaver-encoder subsystem
 xi, zi, dli, dci, dri = encoder(pi)
-
 
 with open("p.txt", "w") as f:
     for item in p:
@@ -112,12 +112,20 @@ with open("z.txt", "w") as f:
     for item in z:
         f.write("%s\n" % item)
 
+with open("xi.txt", "w") as f:
+    for item in xi:
+        f.write("%s\n" % item)
+
+with open("zi.txt", "w") as f:
+    for item in zi:
+        f.write("%s\n" % item)
+
 
 #print("inp: ", p)
 #print("x: ", x)
 #print("z: ", z)
 #print("xi: ", xi)
 #print("zi: ", zi)
-#print("dl: ", dl)
+print("dl: ", dl)
 #print("dc: ", dc)
 #print("dr: ", dr)
