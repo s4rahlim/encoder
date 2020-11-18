@@ -11,7 +11,7 @@ module tailprocessor(reset, clk, q01, q11, x1, z1, x2, z2, tailbits, d0, d1, d2)
 	reg xK, zK, xK1, zK1, xK2, zK2;
 	reg storedxK, storedzK, storedxK1, storedzK1, storedxK2, storedzK2;
 	
-	always @ (*)
+	always @ (negedge clk)
 		begin
 			case(state)
 				A:
