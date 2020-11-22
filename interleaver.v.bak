@@ -6,7 +6,6 @@ input clk, reset, data_ready, k_bit_in, FIFO_rdreq, cin;
 output wire cout, k_bit_out;
 output reg data_valid;
 
-
 wire [12:0] count;
 output wire [12:0] pi; /////// TEMP - move to wire [12:0]
 wire c_prime, data_valid_FSM;

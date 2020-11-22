@@ -3,6 +3,7 @@ module encoder (ck, clk, data_ready, aclr, xk, zk, K, busy, dd0, dd1, dd2);
 	//datra_ready from interleaver to indicate data is ready, only one cycle 
 	input K; //0 is smaller block 1056, 1 is larger block 6144
 	output xk, zk, busy, dd0, dd1, dd2;
+	//When count == K signal is sent to trellis termination to do tail-bit generation.
 //	output [31:0] debug2;
 //	output debug3;
 	
@@ -73,6 +74,7 @@ module encoder (ck, clk, data_ready, aclr, xk, zk, K, busy, dd0, dd1, dd2);
 	xor x3(zk, m1, q2);
 	assign xk = ck;
 	assign last = (counter > K_size+1);
+	assign tailbits = (counter == K_size);
 	assign busy = (0 < counter && counter <= (K_size)+1);  
 	assign mux_out = last? m0 : ck;
 	assign dd0 = q0;

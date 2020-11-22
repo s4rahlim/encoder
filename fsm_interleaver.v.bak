@@ -78,6 +78,7 @@ module fsm_interleaver(clk, reset, data_ready, K, u, data_valid, current_state, 
 			D: next_state = (cmp_out)?D:D2;
 			D2: next_state = (cmp_out)?D2:E;
 			E: next_state = A;
+			F: next_state = A;
 		  endcase
 	  end
 		
